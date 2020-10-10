@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -7,9 +7,13 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import { Alert, AlertTitle } from '@material-ui/lab';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { toast } from 'react-toastify';
 
 import Container from '../../components/Container';
 import { formatPrice } from '../../util/format';
+import api from '../../services/api';
 
 const useStyles = makeStyles({
   table: {
@@ -17,21 +21,51 @@ const useStyles = makeStyles({
   },
 });
 
-const data = [
-  {
-    id: 1,
-    name: 'Leilão #1',
-    value: formatPrice(1000),
-    is_used: 'Sim',
-    is_completed: 'Não',
-    responsabler: {
-      name: 'Antonio Sousa'
+export default function Main() {
+  const [auctions, setAuctions] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasError, setHasError] = useState(false);
+  const classes = useStyles();
+
+  async function loadAuctions() {
+    try {
+      const response = await api.get('auctions');
+      const data = response.data.map(auction => ({
+        ...auction,
+        is_completed: auction.is_completed ? 'Sim' : 'Não',
+        is_used: auction.is_used ? 'Sim' : 'Não',
+        value: formatPrice(auction.value)
+      }))
+      setAuctions(data);
+      setIsLoading(false);
+    } catch {
+      toast.error('Falha no carregamento dos leilões');
+      setHasError(true);
+      setIsLoading(false);
     }
   }
-];
 
-export default function Main() {
-  const classes = useStyles();
+  useEffect(() => {
+    loadAuctions();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <Container center>
+        <CircularProgress color="#37B6C4" />
+      </Container>
+    )
+  }
+
+  if (hasError) {
+    return (
+      <Container>
+        <Alert severity="error">
+          <AlertTitle>Ocorreu algum erro. Tente acessar novamente mais tarde.</AlertTitle>
+        </Alert>
+      </Container>
+    );
+  }
 
   return (
     <Container>
@@ -47,14 +81,14 @@ export default function Main() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.map((auction) => (
+            {auctions.map((auction) => (
               <TableRow key={auction.id}>
                 <TableCell component="th" scope="row">
                   {auction.name}
                 </TableCell>
                 <TableCell align="right">{auction.value}</TableCell>
                 <TableCell align="right">{auction.is_used}</TableCell>
-                <TableCell align="right">{auction.responsabler.name}</TableCell>
+                <TableCell align="right">{auction.value}</TableCell>
                 <TableCell align="right">{auction.is_completed}</TableCell>
               </TableRow>
             ))}
