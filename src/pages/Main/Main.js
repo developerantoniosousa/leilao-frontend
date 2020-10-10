@@ -12,6 +12,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { toast } from 'react-toastify';
 
 import Container from '../../components/Container';
+import StyledLink from '../../components/StyledLink';
 import { formatPrice } from '../../util/format';
 import api from '../../services/api';
 
@@ -69,6 +70,9 @@ export default function Main() {
 
   return (
     <Container>
+      <StyledLink to="/auction/new">
+        Adicionar leilão
+      </StyledLink>
       <TableContainer component={Paper}>
         <Table className={classes.table} aria-label="simple table">
           <TableHead>
