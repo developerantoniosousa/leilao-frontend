@@ -92,7 +92,7 @@ export default function Main() {
                 </TableCell>
                 <TableCell align="right">{auction.value}</TableCell>
                 <TableCell align="right">{auction.is_used}</TableCell>
-                <TableCell align="right">{auction.value}</TableCell>
+                <TableCell align="right">{auction.responsabler?.email}</TableCell>
                 <TableCell align="right">{auction.is_completed}</TableCell>
               </TableRow>
             ))}
