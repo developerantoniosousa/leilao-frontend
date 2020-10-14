@@ -12,11 +12,26 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 import { MdEdit, MdDelete } from 'react-icons/md';
+import { FiLogOut } from 'react-icons/fi';
+import styled from 'styled-components';
+import { darken } from 'polished';
 
 import Container from '../../components/Container';
 import StyledLink from '../../components/StyledLink';
 import { formatPrice } from '../../util/format';
 import api from '../../services/api';
+
+const Logout = styled.button`
+  border: none;
+  float: right;
+  padding: 8px;
+  margin-top: -20px;
+  cursor: pointer;
+
+  &:hover {
+    background: ${darken(0.03, '#eee')};
+  }
+`;
 
 const useStyles = makeStyles({
   table: {
@@ -62,6 +77,11 @@ export default function Main() {
     }
   }
 
+  function handleSignOut() {
+    localStorage.removeItem('@leilao:token');
+    window.location.reload();
+  }
+
   if (isLoading) {
     return (
       <Container center>
@@ -82,6 +102,7 @@ export default function Main() {
 
   return (
     <Container>
+      <Logout onClick={handleSignOut}>Sair <FiLogOut /></Logout>
       <StyledLink to="/auction/new">
         Adicionar leilão
       </StyledLink>
