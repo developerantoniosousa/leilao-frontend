@@ -11,7 +11,7 @@ import { Alert, AlertTitle } from '@material-ui/lab';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
-import { MdEdit } from 'react-icons/md';
+import { MdEdit, MdDelete } from 'react-icons/md';
 
 import Container from '../../components/Container';
 import StyledLink from '../../components/StyledLink';
@@ -51,6 +51,16 @@ export default function Main() {
   useEffect(() => {
     loadAuctions();
   }, []);
+
+  async function handleDelete(id, name) {
+    try {
+      await api.delete(`auctions/${id}`);
+      toast.success('O leilão foi excluido');
+      loadAuctions();
+    } catch {
+      toast.error(`O leilão ${name} não pode ser excluido`);
+    }
+  }
 
   if (isLoading) {
     return (
@@ -101,6 +111,12 @@ export default function Main() {
                   <Link to={`/auction/update/${auction.id}`}>
                     <MdEdit size={20} color="#000" />
                   </Link>
+                  <MdDelete
+                    size={20}
+                    color="#f00"
+                    onClick={() => handleDelete(auction.id, auction.name)}
+                    style={{ cursor: 'pointer', marginLeft: 5 }}
+                  />
                 </TableCell>
               </TableRow>
             ))}
