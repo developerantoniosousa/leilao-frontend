@@ -10,6 +10,8 @@ import Paper from '@material-ui/core/Paper';
 import { Alert, AlertTitle } from '@material-ui/lab';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { toast } from 'react-toastify';
+import { Link } from 'react-router-dom';
+import { MdEdit } from 'react-icons/md';
 
 import Container from '../../components/Container';
 import StyledLink from '../../components/StyledLink';
@@ -82,6 +84,7 @@ export default function Main() {
               <TableCell align="right">Usado</TableCell>
               <TableCell align="right">Responsável</TableCell>
               <TableCell align="right">Finalizado</TableCell>
+              <TableCell align="right"></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -94,6 +97,11 @@ export default function Main() {
                 <TableCell align="right">{auction.is_used}</TableCell>
                 <TableCell align="right">{auction.responsabler?.email}</TableCell>
                 <TableCell align="right">{auction.is_completed}</TableCell>
+                <TableCell align="right">
+                  <Link to={`/auction/update/${auction.id}`}>
+                    <MdEdit size={20} color="#000" />
+                  </Link>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
