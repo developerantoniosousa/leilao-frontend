@@ -9,7 +9,7 @@ ReactDOM.render(
   <React.StrictMode>
     <GlobalStyle />
     <App />
-    <ToastContainer />
+    <ToastContainer autoClose={3000} />
   </React.StrictMode>,
   document.getElementById('root')
 );
